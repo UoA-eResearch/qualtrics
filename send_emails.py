@@ -20,8 +20,10 @@ print(df["Q4"].value_counts())
 
 df.EndDate = pd.to_datetime(df.EndDate, errors="coerce")
 
+already_sent = pd.read_csv("sent_emails.csv")
+
 # Filter to users that consented to email reminders, and haven't touched the survey in 7 days
-df = df[(df["Q4"] == "1") & (df["EndDate"] < last_week)]
+df = df[(df["Q4"] == "1") & (df["EndDate"] < last_week) & (~df["Q11_4"].isin(already_sent["email"]))]
 print(df)
 
 mailserver = smtplib.SMTP("mailhost.auckland.ac.nz")
@@ -42,3 +44,4 @@ for i, row in df.iterrows():
     msg.attach(part1)
     print(f"Sending mail from {fromaddr} to {email} with subject {subject}")
     mailserver.sendmail(fromaddr, email, msg.as_string())
+    pd.DataFrame([{"email": email, "sent_at": pd.Timestamp.now()}]).to_csv("sent_emails.csv", mode="a", index=False)
