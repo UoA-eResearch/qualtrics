@@ -6,6 +6,10 @@ from jinja2 import Environment, FileSystemLoader
 import smtplib
 from email.mime.multipart import MIMEMultipart
 from email.mime.text import MIMEText
+from datetime import datetime, timedelta
+
+last_week = datetime.now() - timedelta(weeks=1)
+print(last_week)
 
 environment = Environment(loader=FileSystemLoader(""))
 template = environment.get_template("reminder_template.txt")
@@ -14,8 +18,10 @@ df = pd.read_csv("responses.csv.zip")
 print(df)
 print(df["Q4"].value_counts())
 
-# Filter to users that consented to email reminders
-df = df[df["Q4"] == "1"]
+df.EndDate = pd.to_datetime(df.EndDate, errors="coerce")
+
+# Filter to users that consented to email reminders, and haven't touched the survey in 7 days
+df = df[(df["Q4"] == "1") & (df["EndDate"] < last_week)]
 print(df)
 
 mailserver = smtplib.SMTP("mailhost.auckland.ac.nz")
