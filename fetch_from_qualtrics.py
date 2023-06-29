@@ -4,6 +4,8 @@ import requests
 import os
 import time
 from pprint import pprint
+from dotenv import load_dotenv
+load_dotenv()
 
 # API key from https://auckland.au1.qualtrics.com/Q/QualtricsIdsSection/IdsSection
 QUALTRICS_API_KEY = os.getenv("QUALTRICS_API_KEY")
