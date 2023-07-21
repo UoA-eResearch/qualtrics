@@ -18,6 +18,7 @@ df["EndDate+1week"] = df.EndDate + pd.Timedelta(weeks=1)
 
 try:
     already_sent = pd.read_csv("sent_emails.csv")
+    already_sent["sent_at"] = pd.to_datetime(already_sent["sent_at"], errors="coerce")
 except FileNotFoundError:
     already_sent = pd.DataFrame(columns=["email", "sent_at"])
 
@@ -29,12 +30,23 @@ df = df[df["Q4"] == "1"]
 
 print(df[["StartDate", "EndDate", "EndDate+1week", "UN", "First", "Last", "Q11_4", "Q4"]].sort_values(by="EndDate"))
 
-# Filter to users that haven't touched the survey in 1 week and haven't already had a reminder
-df = df[(df["EndDate+1week"] < pd.Timestamp.now(tz="Pacific/Auckland")) & (~df["Q11_4"].isin(already_sent["email"]))]
+def check_sent_email_recently(email):
+    already_sent_to_this_person = already_sent[already_sent["email"] == email]
+    if len(already_sent_to_this_person) == 0:
+        return False
+    last_email = already_sent_to_this_person.sent_at.max()
+    if (pd.Timestamp.now() - last_email) > pd.Timedelta(days=30):
+        return False
+    else:
+        return True
+
+# Filter to users that haven't touched the survey in 1 week and haven't already had a reminder recently
+df = df[(df["EndDate+1week"] < pd.Timestamp.now(tz="Pacific/Auckland")) & (~df["Q11_4"].apply(check_sent_email_recently))]
 if len(df) == 0:
     print("No emails need to be sent")
     exit(1)
 
+print(df[["StartDate", "EndDate", "EndDate+1week", "UN", "First", "Last", "Q11_4", "Q4"]])
 print(f"Will start sending {len(df)} emails in 10 seconds, CTRL-C now or forever hold your peace")
 time.sleep(10)
 
