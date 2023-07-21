@@ -1,4 +1,9 @@
-Dear {{First}} {{Last}},
+Dear {{First}},
 
-This is an automated reminder to complete the Long COVID registry survey, which you have started but not finished. Here is a link to continue the survey: <a href="https://auckland.au1.qualtrics.com/jfe/form/SV_dgNMML7qi8c5zHU">https://auckland.au1.qualtrics.com/jfe/form/SV_dgNMML7qi8c5zHU</a>
-You are receiving this email because you consented to reminder emails. If you no longer wish to receive reminder emails, return to the survey and revoke your reminder consent.
+This is an automated reminder about your Long COVID registry surveys.
+
+Here is a link to continue your survey when you're ready <a href="https://auckland.au1.qualtrics.com/jfe/form/SV_dgNMML7qi8c5zHU">https://auckland.au1.qualtrics.com/jfe/form/SV_dgNMML7qi8c5zHU</a>
+
+Please take your time, there is six months to complete it.  We will continue to send gentle reminders periodically to help you easily access yours.
+
+If you no longer wish to receive reminder emails, return to the survey and revoke your reminder consent.
